@@ -1,0 +1,82 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+
+const WELCOME_IMAGES = [
+  "/images/photo1.jpg",
+  "/images/photo2.jpg",
+  "/images/photo3.jpg",
+  "/images/photo4.jpg",
+  "/images/photo5.jpg",
+  "/images/photo6.jpg",
+  "/images/photo7.jpg",
+  "/images/photo8.jpg",
+  "/images/photo9.jpg",
+  "/images/photo10.jpg",
+];
+
+export default function MotherProject() {
+  const [pageIndex, setPageIndex] = useState(0);
+  const [showVideo, setShowVideo] = useState(false);
+
+  const nextPage = () => {
+    if (pageIndex < WELCOME_IMAGES.length - 1) {
+      setPageIndex(pageIndex + 1);
+    } else {
+      setShowVideo(true);
+    }
+  };
+
+  return (
+    <div className="w-full h-screen bg-black text-white flex items-center justify-center">
+      <AnimatePresence>
+        {!showVideo ? (
+          <motion.div
+            key={pageIndex}
+            className="absolute w-full h-full flex flex-col"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            style={{ backgroundImage: `url(${WELCOME_IMAGES[pageIndex]})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+          >
+            {pageIndex === 0 ? (
+              <div className="flex-grow flex items-center justify-center">
+                <Button
+                  className="bg-white text-black text-xl px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition"
+                  onClick={nextPage}
+                >
+                  ENTER
+                </Button>
+              </div>
+            ) : (
+              <div className="flex-grow flex items-end justify-center pb-12">
+                <Button
+                  className="bg-white text-black text-xl px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition"
+                  onClick={nextPage}
+                >
+                  CONTINUE
+                </Button>
+              </div>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="video"
+            className="w-full h-full flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <video
+              src="/videos/mother_project_video.mp4"
+              className="w-full h-full object-cover"
+              controls
+              autoPlay
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
