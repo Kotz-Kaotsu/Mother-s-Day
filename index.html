@@ -1,60 +1,106 @@
-import { useState } from "react";
-
-// Update this with the raw GitHub URLs for your images
-const WELCOME_IMAGES = [
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo1.JPG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo2.JPG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo3.JPG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo4.JPG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo5.JPG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo6.JPG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo7.JPG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo8.PNG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo9.PNG",
-  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo10.JPEG",
-];
-
-const getButtonText = (step) => {
-  return step === 0 ? "ENTER" : "CONTINUE";
-};
-
-export default function WelcomeSequence() {
-  const [step, setStep] = useState(0);
-  const [errorLoadingVideo, setErrorLoadingVideo] = useState(false);
-
-  const handleNextStep = () => {
-    if (step < WELCOME_IMAGES.length - 1) {
-      setStep((s) => s + 1);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Sequence</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
     }
-  };
 
-  const googleDriveFileId = "1XMPTPj-HHe1pR9oLpVJgakcOFgLqpeHh";
+    .hero {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background-size: cover;
+      background-position: center;
+    }
 
-  return (
-    <div
-      className={`w-screen h-screen bg-black text-white flex flex-col ${
-        step === 0 ? "items-center justify-center" : "justify-between"
-      }`}
-      style={{
-        backgroundImage: step < WELCOME_IMAGES.length ? `url(${WELCOME_IMAGES[step]})` : "none",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {step < WELCOME_IMAGES.length ? (
-        <>
-          {step !== 0 && <div className="flex-grow" />}
-          <div className="w-full flex justify-center mb-8">
-            <button
-              onClick={handleNextStep}
-              className="px-6 py-3 bg-white text-black text-xl rounded-full shadow-lg hover:bg-gray-200 transition"
-            >
-              {getButtonText(step)}
-            </button>
-          </div>
-        </>
-      ) : (
-        <div className="w-screen h-screen bg-black flex items-center justify-center">
+    .button {
+      padding: 10px 20px;
+      background-color: white;
+      color: black;
+      font-size: 18px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #ddd;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="hero" class="hero">
+    <button id="nextButton" class="button">ENTER</button>
+  </div>
+
+  <script>
+    const WELCOME_IMAGES = [
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo1.JPG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo2.JPG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo3.JPG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo4.JPG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo5.JPG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo6.JPG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo7.JPG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo8.PNG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo9.PNG",
+      "https://raw.githubusercontent.com/Kotz-Kaotsu/Mother-s-Day/main/images/photo10.JPEG",
+    ];
+
+    let step = 0;
+    const googleDriveFileId = "1XMPTPj-HHe1pR9oLpVJgakcOFgLqpeHh";
+    const heroElement = document.getElementById('hero');
+    const nextButton = document.getElementById('nextButton');
+
+    const updateUI = () => {
+      if (step < WELCOME_IMAGES.length) {
+        heroElement.style.backgroundImage = `url(${WELCOME_IMAGES[step]})`;
+        nextButton.innerHTML = step === 0 ? "ENTER" : "CONTINUE";
+      } else {
+        heroElement.innerHTML = `
+          <iframe src="https://drive.google.com/file/d/${googleDriveFileId}/preview" allow="autoplay" allowfullscreen title="Mother Project Video"></iframe>
+        `;
+      }
+    };
+
+    const handleNextStep = () => {
+      if (step < WELCOME_IMAGES.length) {
+        step++;
+      }
+      updateUI();
+    };
+
+    nextButton.addEventListener('click', handleNextStep);
+
+    updateUI(); // Initialize UI
+  </script>
+
+</body>
+</html>
+ex items-center justify-center">
           {errorLoadingVideo ? (
             <div className="text-white text-center">
               <p>Sorry, we couldn't load the video.</p>
