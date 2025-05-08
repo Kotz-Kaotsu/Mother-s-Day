@@ -25,6 +25,12 @@
       text-align: center;
       background-size: cover;
       background-position: center;
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .fade-out {
+      opacity: 0;
     }
 
     .button-container {
@@ -59,9 +65,19 @@
       color: white;
       text-align: center;
     }
+
+    audio {
+      display: none;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Background Music -->
+  <audio id="bgm" autoplay loop>
+    <source src="https://www.youtube.com/watch?v=U4B445VqYE4" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
   <div id="hero" class="hero"></div>
 
@@ -88,31 +104,38 @@
     const heroElement = document.getElementById('hero');
     const nextButton = document.getElementById('nextButton');
 
+    const fadeDuration = 1000; // in ms
+
     const updateUI = () => {
-      if (step < WELCOME_IMAGES.length) {
-        heroElement.style.backgroundImage = `url(${WELCOME_IMAGES[step]})`;
-        nextButton.innerHTML = step === 0 ? "ENTER" : "CONTINUE";
-      } else {
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://drive.google.com/file/d/${googleDriveFileId}/preview`;
-        iframe.allow = "autoplay";
-        iframe.allowFullscreen = true;
-        iframe.title = "Mother Project Video";
+      heroElement.classList.add("fade-out");
 
-        iframe.onerror = () => {
-          heroElement.innerHTML = `
-            <div class="error-message">
-              <p>Sorry, we couldn't load the video.</p>
-            </div>
-          `;
-        };
+      setTimeout(() => {
+        if (step < WELCOME_IMAGES.length) {
+          heroElement.style.backgroundImage = `url(${WELCOME_IMAGES[step]})`;
+          nextButton.innerHTML = step === 0 ? "ENTER" : "CONTINUE";
+        } else {
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://drive.google.com/file/d/${googleDriveFileId}/preview`;
+          iframe.allow = "autoplay";
+          iframe.allowFullscreen = true;
+          iframe.title = "Mother Project Video";
 
-        heroElement.innerHTML = '';
-        heroElement.appendChild(iframe);
+          iframe.onerror = () => {
+            heroElement.innerHTML = `
+              <div class="error-message">
+                <p>Sorry, we couldn't load the video.</p>
+              </div>
+            `;
+          };
 
-        // Optionally hide the button after showing the video
-        document.querySelector('.button-container').style.display = 'none';
-      }
+          heroElement.innerHTML = '';
+          heroElement.appendChild(iframe);
+
+          document.querySelector('.button-container').style.display = 'none';
+        }
+
+        heroElement.classList.remove("fade-out");
+      }, fadeDuration);
     };
 
     const handleNextStep = () => {
