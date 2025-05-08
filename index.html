@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welcome Sequence</title>
   <style>
     body {
@@ -13,13 +13,11 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
     }
 
     .hero {
-      height: 100%;
+      flex: 1;
       width: 100%;
       display: flex;
       justify-content: center;
@@ -27,6 +25,14 @@
       text-align: center;
       background-size: cover;
       background-position: center;
+    }
+
+    .button-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      background-color: black;
     }
 
     .button {
@@ -57,7 +63,9 @@
 </head>
 <body>
 
-  <div id="hero" class="hero">
+  <div id="hero" class="hero"></div>
+
+  <div class="button-container">
     <button id="nextButton" class="button">ENTER</button>
   </div>
 
@@ -91,7 +99,6 @@
         iframe.allowFullscreen = true;
         iframe.title = "Mother Project Video";
 
-        // Error handling: If the video fails to load
         iframe.onerror = () => {
           heroElement.innerHTML = `
             <div class="error-message">
@@ -102,6 +109,9 @@
 
         heroElement.innerHTML = '';
         heroElement.appendChild(iframe);
+
+        // Optionally hide the button after showing the video
+        document.querySelector('.button-container').style.display = 'none';
       }
     };
 
@@ -119,5 +129,3 @@
 
 </body>
 </html>
-
-
