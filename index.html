@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 
 const WELCOME_IMAGES = [
   "/images/photo1.JPG",
@@ -15,68 +13,45 @@ const WELCOME_IMAGES = [
   "/images/photo10.JPEG",
 ];
 
-export default function MotherProject() {
-  const [pageIndex, setPageIndex] = useState(0);
-  const [showVideo, setShowVideo] = useState(false);
+export default function WelcomeSequence() {
+  const [step, setStep] = useState(0);
 
-  const nextPage = () => {
-    if (pageIndex < WELCOME_IMAGES.length - 1) {
-      setPageIndex(pageIndex + 1);
-    } else {
-      setShowVideo(true);
-    }
-  };
+  if (step < WELCOME_IMAGES.length) {
+    return (
+      <div
+        className={`w-screen h-screen bg-black text-white flex flex-col ${step === 0 ? "items-center justify-center" : "justify-between"}`}
+        style={{
+          backgroundImage: `url(${WELCOME_IMAGES[step]})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {step !== 0 && <div className="flex-grow" />}
+        <div className="w-full flex justify-center mb-8">
+          <button
+            onClick={() => setStep((s) => s + 1)}
+            className="px-6 py-3 bg-white text-black text-xl rounded-full shadow-lg hover:bg-gray-200 transition"
+          >
+            {step === 0 ? "ENTER" : "CONTINUE"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Replace this with your actual Google Drive file ID
+  const googleDriveFileId = "1aBcDxyz123456789";
 
   return (
-    <div className="w-full h-screen bg-black text-white flex items-center justify-center">
-      <AnimatePresence>
-        {!showVideo ? (
-          <motion.div
-            key={pageIndex}
-            className="absolute w-full h-full flex flex-col"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            style={{ backgroundImage: `url(${WELCOME_IMAGES[pageIndex]})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-          >
-            {pageIndex === 0 ? (
-              <div className="flex-grow flex items-center justify-center">
-                <Button
-                  className="bg-white text-black text-xl px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition"
-                  onClick={nextPage}
-                >
-                  ENTER
-                </Button>
-              </div>
-            ) : (
-              <div className="flex-grow flex items-end justify-center pb-12">
-                <Button
-                  className="bg-white text-black text-xl px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition"
-                  onClick={nextPage}
-                >
-                  CONTINUE
-                </Button>
-              </div>
-            )}
-          </motion.div>
-        ) : (
-          <motion.div
-            key="video"
-            className="w-full h-full flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
-            <video
-              src="/videos/video.MOV"
-              className="w-full h-full object-cover"
-              controls
-              autoPlay
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="w-screen h-screen bg-black flex items-center justify-center">
+      <iframe
+        src={`https://drive.google.com/file/d/1XMPTPj-HHe1pR9oLpVJgakcOFgLqpeHh/preview`}
+        className="w-full h-full"
+        allow="autoplay"
+        allowFullScreen
+        title="Mother Project Video"
+      ></iframe>
     </div>
   );
 }
+
