@@ -1,59 +1,78 @@
 import { useState } from "react";
 
+// Update this with the raw GitHub URLs for your images
 const WELCOME_IMAGES = [
-  "/images/photo1.JPG",
-  "/images/photo2.JPG",
-  "/images/photo3.JPG",
-  "/images/photo4.JPG",
-  "/images/photo5.JPG",
-  "/images/photo6.JPG",
-  "/images/photo7.JPG",
-  "/images/photo8.PNG",
-  "/images/photo9.PNG",
-  "/images/photo10.JPEG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo1.JPG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo2.JPG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo3.JPG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo4.JPG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo5.JPG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo6.JPG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo7.JPG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo8.PNG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo9.PNG",
+  "https://raw.githubusercontent.com/{Kotz-Kaotsu}/{Mother-s-Day}/{main}/images/photo10.JPEG",
 ];
+
+const getButtonText = (step) => {
+  return step === 0 ? "ENTER" : "CONTINUE";
+};
 
 export default function WelcomeSequence() {
   const [step, setStep] = useState(0);
+  const [errorLoadingVideo, setErrorLoadingVideo] = useState(false);
 
-  if (step < WELCOME_IMAGES.length) {
-    return (
-      <div
-        className={`w-screen h-screen bg-black text-white flex flex-col ${
-          step === 0 ? "items-center justify-center" : "justify-between"
-        }`}
-        style={{
-          backgroundImage: `url(${WELCOME_IMAGES[step]})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {step !== 0 && <div className="flex-grow" />}
-        <div className="w-full flex justify-center mb-8">
-          <button
-            onClick={() => setStep((s) => s + 1)}
-            className="px-6 py-3 bg-white text-black text-xl rounded-full shadow-lg hover:bg-gray-200 transition"
-          >
-            {step === 0 ? "ENTER" : "CONTINUE"}
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const handleNextStep = () => {
+    if (step < WELCOME_IMAGES.length - 1) {
+      setStep((s) => s + 1);
+    }
+  };
 
-  // Replace this with your actual Google Drive file ID
   const googleDriveFileId = "1XMPTPj-HHe1pR9oLpVJgakcOFgLqpeHh";
 
   return (
-    <div className="w-screen h-screen bg-black flex items-center justify-center">
-      <iframe
-        src={`https://drive.google.com/file/d/${googleDriveFileId}/preview`}
-        className="w-full h-full"
-        allow="autoplay"
-        allowFullScreen
-        title="Mother Project Video"
-      ></iframe>
+    <div
+      className={`w-screen h-screen bg-black text-white flex flex-col ${
+        step === 0 ? "items-center justify-center" : "justify-between"
+      }`}
+      style={{
+        backgroundImage: step < WELCOME_IMAGES.length ? `url(${WELCOME_IMAGES[step]})` : "none",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {step < WELCOME_IMAGES.length ? (
+        <>
+          {step !== 0 && <div className="flex-grow" />}
+          <div className="w-full flex justify-center mb-8">
+            <button
+              onClick={handleNextStep}
+              className="px-6 py-3 bg-white text-black text-xl rounded-full shadow-lg hover:bg-gray-200 transition"
+            >
+              {getButtonText(step)}
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className="w-screen h-screen bg-black flex items-center justify-center">
+          {errorLoadingVideo ? (
+            <div className="text-white text-center">
+              <p>Sorry, we couldn't load the video.</p>
+            </div>
+          ) : (
+            <iframe
+              src={`https://drive.google.com/file/d/${googleDriveFileId}/preview`}
+              className="w-full h-full"
+              allow="autoplay"
+              allowFullScreen
+              title="Mother Project Video"
+              onError={() => setErrorLoadingVideo(true)}
+            ></iframe>
+          )}
+        </div>
+      )}
     </div>
   );
 }
+
 
