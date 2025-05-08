@@ -19,7 +19,9 @@ export default function WelcomeSequence() {
   if (step < WELCOME_IMAGES.length) {
     return (
       <div
-        className={`w-screen h-screen bg-black text-white flex flex-col ${step === 0 ? "items-center justify-center" : "justify-between"}`}
+        className={`w-screen h-screen bg-black text-white flex flex-col ${
+          step === 0 ? "items-center justify-center" : "justify-between"
+        }`}
         style={{
           backgroundImage: `url(${WELCOME_IMAGES[step]})`,
           backgroundSize: "cover",
